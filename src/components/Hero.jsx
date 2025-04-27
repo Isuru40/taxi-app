@@ -7,7 +7,7 @@ const Hero = ({ setShowForm }) => {
             <div className="container mx-auto px-4 text-center">
                 {/* Logo as a foreground image */}
                 <img
-                    src="../icon.jpg"
+                    src="../vite.svg"
                     alt="Laksiri Tours Kandy Logo"
                     className="mx-auto mb-6 w-40 sm:w-48 md:w-56 h-auto"
                 />
