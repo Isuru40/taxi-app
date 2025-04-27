@@ -16,56 +16,98 @@ const LocationReviews = () => {
                 </a>
             </p>
             <h3 className="text-xl font-semibold text-center mb-4 text-laksiri-purple">Google Reviews</h3>
-            <div className="max-w-4xl mx-auto w-full">
+            <div className="w-full max-w-full mx-auto px-2 sm:max-w-4xl">
                 <div className="sk-ww-google-reviews w-full" data-embed-id="25550937"></div>
             </div>
 
             {/* Custom CSS to fix mobile view */}
             <style jsx>{`
-                /* Ensure the parent container is responsive */
-                .sk-ww-google-reviews {
+                /* Ensure the parent container takes full width on mobile */
+                .max-w-full {
+                    max-width: 100% !important;
                     width: 100% !important;
-                    overflow: hidden !important;
                 }
 
-                /* Override SociableKIT's review feed container */
+                /* Force the SociableKIT widget to fit within the viewport */
+                .sk-ww-google-reviews {
+                    width: 100% !important;
+                    max-width: 100% !important;
+                    overflow: hidden !important;
+                    box-sizing: border-box !important;
+                }
+
+                /* Target the review feed container */
                 .sk-ww-google-reviews-feed {
                     width: 100% !important;
                     max-width: 100% !important;
-                    display: flex;
-                    flex-wrap: nowrap;
+                    display: flex !important;
+                    flex-wrap: nowrap !important;
                     overflow-x: auto !important;
-                    scroll-snap-type: x mandatory;
-                    -webkit-overflow-scrolling: touch;
+                    scroll-snap-type: x mandatory !important;
+                    -webkit-overflow-scrolling: touch !important;
+                    padding: 0 !important;
+                    margin: 0 !important;
                 }
 
                 /* Style individual review cards */
-                .sk-ww-google-reviews-review {
-                    flex: 0 0 90% !important; /* Take up 90% of the viewport width on mobile */
-                    max-width: 90% !important;
-                    margin: 0 5% !important; /* Center the card with 5% margin on each side */
-                    scroll-snap-align: center;
+                .sk-ww-google-reviews-feed .sk-ww-google-reviews-review {
+                    flex: 0 0 85% !important;
+                    max-width: 85% !important;
+                    min-width: 0 !important; /* Prevent fixed min-width issues */
+                    margin: 0 2.5% !important;
+                    scroll-snap-align: center !important;
+                    box-sizing: border-box !important;
+                }
+
+                /* Ensure inner elements of the review card don't overflow */
+                .sk-ww-google-reviews-feed .sk-ww-google-reviews-review > div,
+                .sk-ww-google-reviews-feed .sk-ww-google-reviews-review > span {
+                    width: 100% !important;
+                    max-width: 100% !important;
+                    overflow-wrap: break-word !important;
                 }
 
                 /* Adjust navigation arrows */
                 .sk-ww-google-reviews-feed .sk-ww-google-reviews-prev,
                 .sk-ww-google-reviews-feed .sk-ww-google-reviews-next {
                     top: 50% !important;
-                    transform: translateY(-50%);
+                    transform: translateY(-50%) !important;
+                    width: 30px !important;
+                    height: 30px !important;
+                    z-index: 10 !important;
                 }
 
-                /* Ensure the "View on Google" link fits */
+                /* Position the "View on Google" link */
                 .sk-ww-google-reviews-feed a[href*="google.com"] {
                     display: block !important;
                     width: 100% !important;
+                    max-width: 100% !important;
                     text-align: center !important;
                     margin-top: 1rem !important;
+                    font-size: 0.9rem !important;
                 }
 
-                /* Media query for larger screens */
-                @media (min-width: 768px) {
-                    .sk-ww-google-reviews-review {
-                        flex: 0 0 300px !important; /* Fixed width for larger screens */
+                /* Specific adjustments for mobile screens */
+                @media (max-width: 640px) {
+                    .sk-ww-google-reviews-feed .sk-ww-google-reviews-review {
+                        flex: 0 0 90% !important;
+                        max-width: 90% !important;
+                        margin: 0 5% !important;
+                    }
+
+                    .sk-ww-google-reviews-feed .sk-ww-google-reviews-prev {
+                        left: 0 !important;
+                    }
+
+                    .sk-ww-google-reviews-feed .sk-ww-google-reviews-next {
+                        right: 0 !important;
+                    }
+                }
+
+                /* Adjustments for larger screens */
+                @media (min-width: 641px) {
+                    .sk-ww-google-reviews-feed .sk-ww-google-reviews-review {
+                        flex: 0 0 300px !important;
                         max-width: 300px !important;
                         margin: 0 10px !important;
                     }
