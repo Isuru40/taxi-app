@@ -13,15 +13,15 @@ const Footer = () => {
                 </a>
             </div>
             <p className="text-gray-800 mb-2">
-                Email: <a href="mailto:laksiriroshan109@gmail.com" className="text-blue-600 hover:text-yellow-400">laksiriroshan109@gmail.com</a>
+                Email: <a href="mailto:laksiriroshan109@gmail.com" className="text-laksiri-purple hover:text-laksiri-purple-hover">laksiriroshan109@gmail.com</a>
             </p>
             <p className="text-gray-800 mb-2">
-                Phone: <a href="https://wa.me/+94757268109" className="text-blue-600 hover:text-yellow-400">+9475348109</a>
+                Phone: <a href="https://wa.me/+94757268109" className="text-laksiri-purple hover:text-laksiri-purple-hover">+94 75 726 8109</a>
             </p>
             <p className="text-gray-800">© 2025 LaksiriToursKandy. All rights reserved.</p>
             {/*<div className="mt-2">*/}
-            {/*    <a href="/sitemap.xml" className="text-blue-600 hover:text-yellow-400 underline mx-2">Sitemap</a>*/}
-            {/*    <a href="/robots.txt" className="text-blue-600 hover:text-yellow-400 underline mx-2">Robots.txt</a>*/}
+            {/*    <a href="/sitemap.xml" className="text-blue-600 hover:text-laksiri-purple-hover underline mx-2">Sitemap</a>*/}
+            {/*    <a href="/robots.txt" className="text-blue-600 hover:text-laksiri-purple-hover underline mx-2">Robots.txt</a>*/}
             {/*</div>*/}
         </footer>
     );

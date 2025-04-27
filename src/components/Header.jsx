@@ -5,16 +5,16 @@ const Header = ({ setShowForm }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     return (
-        <header className="fixed top-0 left-0 w-full bg-blue-600 bg-opacity-0 shadow-lg">
+        <header className="fixed top-0 left-0 w-full bg-laksiri-purple bg-opacity-0 shadow-lg">
             <div className="container mx-auto px-4 py-3 flex items-center justify-between">
                 {/* Logo */}
-                <h2 className="text-yellow-400 text-xl sm:text-2xl font-bold truncate">
+                <h2 className=" text-white text-xl sm:text-2xl font-bold truncate">
                     LaksiriToursKandy
                 </h2>
 
                 {/* Mobile Menu Toggle */}
                 <button
-                    className="md:hidden text-yellow-400 focus:outline-none"
+                    className="md:hidden text-white focus:outline-none"
                     onClick={() => setIsMenuOpen(!isMenuOpen)}
                 >
                     <svg
@@ -46,23 +46,23 @@ const Header = ({ setShowForm }) => {
                 <div
                     className={`${
                         isMenuOpen ? 'flex' : 'hidden'
-                    } md:flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-6 absolute md:static top-14 left-0 w-full md:w-auto bg-blue-600 md:bg-transparent p-4 md:p-0 z-40`}
+                    } md:flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-6 absolute md:static top-14 left-0 w-full md:w-auto bg-laksiri-purple md:bg-transparent p-4 md:p-0 z-40`}
                 >
                     <nav className="flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-6">
-                        <a href="#services" className="text-yellow-400 hover:text-yellow-300 transition-colors">
+                        <a href="#services" className="text-white hover:text-laksiri-headings transition-colors">
                             Services
                         </a>
-                        <a href="#about" className="text-yellow-400 hover:text-yellow-300 transition-colors">
+                        <a href="#about" className="text-white hover:text-laksiri-headings transition-colors">
                             About Us
                         </a>
-                        <a href="#faq" className="text-yellow-400 hover:text-yellow-300 hover:underline transition-colors">
+                        <a href="#faq" className="text-white hover:text-laksiri-headings transition-colors">
                             FAQ
                         </a>
 
                     </nav>
                     <button
                         onClick={() => setShowForm(true)}
-                        className="bg-yellow-400 text-white px-6 py-2 rounded-lg hover:bg-yellow-500 transition-colors font-semibold mt-4 md:mt-0"
+                        className="bg-white text-laksiri-purple px-6 py-2 rounded-lg hover:bg-gray-100 transition-colors font-semibold mt-4 md:mt-0"
                     >
                         Book Now
                     </button>

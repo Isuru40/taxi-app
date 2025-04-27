@@ -1,3 +1,13 @@
+@import "tailwindcss";
+
+@theme {
+  --color-laksiri-purple: #AF55A3;
+  --color-laksiri-purple-hover: #5D5C94;
+  --color-laksiri-card:#CD98C6 ;
+  --color-laksiri-headings:#DEDCE6 ;
+  --color-laksiri-welcome:#B12EA6 ;
+}
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -44,4 +54,5 @@
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background-color: #f9fafb; /* Tailwind's gray-50, a light gray background */
 }

@@ -19,6 +19,7 @@ function App() {
     return (
         <Router>
             <div className="font-sans">
+                <div className="hidden text-laksiri-purple bg-laksiri-purple hover:bg-laksiri-purple-hover focus:ring-laksiri-purple-hover" />
                 <Header setShowForm={setShowForm} />
                 <main className="pt-20">
                     <Hero setShowForm={setShowForm} />
