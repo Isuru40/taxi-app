@@ -18,6 +18,9 @@ const Footer = () => {
             <p className="text-gray-800 mb-2">
                 Phone: <a href="https://wa.me/+94757268109" className="text-laksiri-purple hover:text-laksiri-purple-hover">+94 75 726 8109</a>
             </p>
+            <p className="text-gray-800 mb-2">
+                Government Registration Number: <a href="/" className="text-laksiri-purple hover:text-laksiri-purple-hover"> CP/HP/3210 </a>
+            </p>
             <p className="text-gray-800">© 2025 LaksiriToursKandy. All rights reserved.</p>
             {/*<div className="mt-2">*/}
             {/*    <a href="/sitemap.xml" className="text-blue-600 hover:text-laksiri-purple-hover underline mx-2">Sitemap</a>*/}

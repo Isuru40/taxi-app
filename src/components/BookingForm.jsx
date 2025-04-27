@@ -19,6 +19,7 @@ const BookingForm = ({ setShowForm }) => {
         notes: '',
     });
     const [errors, setErrors] = useState({});
+    const [countryCodeSearch, setCountryCodeSearch] = useState(''); // State for search input
 
     const countryCodes = [
         { code: '+94', label: 'Sri Lanka (+94)' },
@@ -28,7 +29,67 @@ const BookingForm = ({ setShowForm }) => {
         { code: '+61', label: 'Australia (+61)' },
         { code: '+81', label: 'Japan (+81)' },
         { code: '+49', label: 'Germany (+49)' },
+        { code: '+86', label: 'China (+86)' },
+        { code: '+33', label: 'France (+33)' },
+        { code: '+39', label: 'Italy (+39)' },
+        { code: '+34', label: 'Spain (+34)' },
+        { code: '+7', label: 'Russia (+7)' },
+        { code: '+27', label: 'South Africa (+27)' },
+        { code: '+82', label: 'South Korea (+82)' },
+        { code: '+31', label: 'Netherlands (+31)' },
+        { code: '+46', label: 'Sweden (+46)' },
+        { code: '+41', label: 'Switzerland (+41)' },
+        { code: '+966', label: 'Saudi Arabia (+966)' },
+        { code: '+971', label: 'United Arab Emirates (+971)' },
+        { code: '+880', label: 'Bangladesh (+880)' },
+        { code: '+63', label: 'Philippines (+63)' },
+        { code: '+92', label: 'Pakistan (+92)' },
+        { code: '+62', label: 'Indonesia (+62)' },
+        { code: '+20', label: 'Egypt (+20)' },
+        { code: '+351', label: 'Portugal (+351)' },
+        { code: '+48', label: 'Poland (+48)' }, // Removed duplicates
+        { code: '+43', label: 'Austria (+43)' },
+        { code: '+32', label: 'Belgium (+32)' },
+        { code: '+47', label: 'Norway (+47)' },
+        { code: '+45', label: 'Denmark (+45)' },
+        { code: '+90', label: 'Turkey (+90)' },
+        { code: '+234', label: 'Nigeria (+234)' },
+        { code: '+256', label: 'Uganda (+256)' },
+        { code: '+65', label: 'Singapore (+65)' },
+        { code: '+60', label: 'Malaysia (+60)' },
+        { code: '+64', label: 'New Zealand (+64)' },
+        { code: '+36', label: 'Hungary (+36)' },
+        { code: '+420', label: 'Czech Republic (+420)' },
+        { code: '+421', label: 'Slovakia (+421)' },
+        { code: '+386', label: 'Slovenia (+386)' },
+        { code: '+353', label: 'Ireland (+353)' },
+        { code: '+372', label: 'Estonia (+372)' },
+        { code: '+370', label: 'Lithuania (+370)' },
+        { code: '+371', label: 'Latvia (+371)' },
+        { code: '+977', label: 'Nepal (+977)' },
+        { code: '+66', label: 'Thailand (+66)' },
+        { code: '+84', label: 'Vietnam (+84)' },
+        { code: '+968', label: 'Oman (+968)' },
+        { code: '+973', label: 'Bahrain (+973)' },
+        { code: '+974', label: 'Qatar (+974)' },
+        { code: '+212', label: 'Morocco (+212)' },
+        { code: '+254', label: 'Kenya (+254)' },
+        { code: '+998', label: 'Uzbekistan (+998)' },
+        { code: '+380', label: 'Ukraine (+380)' },
     ];
+
+    // Filter country codes based on search input
+    const filteredCountryCodes = countryCodes.filter((country) =>
+        country.label.toLowerCase().includes(countryCodeSearch.toLowerCase())
+    );
+
+    // Reset countryCode if it no longer matches the filtered list
+    if (
+        filteredCountryCodes.length > 0 &&
+        !filteredCountryCodes.some((country) => country.code === formData.countryCode)
+    ) {
+        setFormData({ ...formData, countryCode: filteredCountryCodes[0].code });
+    }
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -56,6 +117,10 @@ const BookingForm = ({ setShowForm }) => {
 
         setFormData({ ...formData, [name]: formattedValue });
         setErrors({ ...errors, [name]: '' });
+    };
+
+    const handleCountryCodeSearch = (e) => {
+        setCountryCodeSearch(e.target.value);
     };
 
     const validateForm = () => {
@@ -193,6 +258,16 @@ const BookingForm = ({ setShowForm }) => {
                     {/* Phone Number with Country Code */}
                     <div>
                         <label className="block text-gray-800 font-semibold mb-2">Phone/WhatsApp Number</label>
+                        {/* Search Bar for Country Code */}
+                        <div className="mb-2">
+                            <input
+                                type="text"
+                                placeholder="Search country code..."
+                                value={countryCodeSearch}
+                                onChange={handleCountryCodeSearch}
+                                className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-laksiri-purple-hover focus:border-transparent transition-all text-gray-800 border-gray-300"
+                            />
+                        </div>
                         <div className="flex space-x-2">
                             <select
                                 name="countryCode"
@@ -202,11 +277,17 @@ const BookingForm = ({ setShowForm }) => {
                                     errors.phone ? 'border-red-500' : 'border-gray-300'
                                 }`}
                             >
-                                {countryCodes.map((country) => (
-                                    <option key={country.code} value={country.code}>
-                                        {country.label}
+                                {filteredCountryCodes.length > 0 ? (
+                                    filteredCountryCodes.map((country) => (
+                                        <option key={country.code} value={country.code}>
+                                            {country.label}
+                                        </option>
+                                    ))
+                                ) : (
+                                    <option value="" disabled>
+                                        No matching countries
                                     </option>
-                                ))}
+                                )}
                             </select>
                             <input
                                 type="tel"
