@@ -4,11 +4,17 @@ import BookingForm from './BookingForm';
 const Header = ({ setShowForm }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+    // Function to handle "Book Now" click and close the mobile menu
+    const handleBookNowClick = () => {
+        setShowForm(true);
+        setIsMenuOpen(false); // Close the mobile menu when opening the form
+    };
+
     return (
-        <header className="fixed top-0 left-0 w-full bg-laksiri-purple bg-opacity-0 shadow-lg">
+        <header className="fixed top-0 left-0 w-full bg-laksiri-purple bg-opacity-90 shadow-lg z-60">
             <div className="container mx-auto px-4 py-3 flex items-center justify-between">
                 {/* Logo */}
-                <h2 className=" text-white text-xl sm:text-2xl font-bold truncate">
+                <h2 className="text-white text-xl sm:text-2xl font-bold truncate">
                     LaksiriToursKandy
                 </h2>
 
@@ -46,7 +52,7 @@ const Header = ({ setShowForm }) => {
                 <div
                     className={`${
                         isMenuOpen ? 'flex' : 'hidden'
-                    } md:flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-6 absolute md:static top-14 left-0 w-full md:w-auto bg-laksiri-purple md:bg-transparent p-4 md:p-0 z-40`}
+                    } md:flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-6 absolute md:static top-14 left-0 w-full md:w-auto bg-laksiri-purple md:bg-transparent p-4 md:p-0 shadow-md md:shadow-none z-50`}
                 >
                     <nav className="flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-6">
                         <a href="#services" className="text-white hover:text-laksiri-headings transition-colors">
@@ -58,10 +64,9 @@ const Header = ({ setShowForm }) => {
                         <a href="#faq" className="text-white hover:text-laksiri-headings transition-colors">
                             FAQ
                         </a>
-
                     </nav>
                     <button
-                        onClick={() => setShowForm(true)}
+                        onClick={handleBookNowClick}
                         className="bg-white text-laksiri-purple px-6 py-2 rounded-lg hover:bg-gray-100 transition-colors font-semibold mt-4 md:mt-0"
                     >
                         Book Now
