@@ -195,7 +195,7 @@ const BookingForm = ({ setShowForm }) => {
     };
 
     return (
-        <div className="fixed inset-0 bg-laksiri-purple bg-opacity-70 flex items-center justify-center z-50 overflow-y-auto">
+        <div className="fixed inset-0 bg-laksiri-purple bg-opacity-70 flex items-center justify-center z-100 overflow-y-auto">
             <div className="bg-white p-6 sm rounded-xl shadow-2xl w-full max-w-md sm:max-w-xl mx-4 sm:mx-auto my-4 max-h-[80vh] overflow-y-auto custom-scrollbar">
                 {/* Header Section */}
                 <div className="flex justify-between items-center mb-6">
