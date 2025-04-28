@@ -5,7 +5,6 @@ const CTA = ({ setShowForm }) => {
             <p className="mb-8">Experience the convenience of booking a ride with LaksiriToursKandy.</p>
             <button
                 onClick={() => {
-                    console.log('CTA.jsx - Book a Ride clicked, setting showForm to true');
                     setShowForm(true);
                 }}
                 className="bg-white text-laksiri-purple px-6 py-3 rounded hover:bg-gray-100"

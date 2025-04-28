@@ -14,7 +14,6 @@ import './App.css';
 function App() {
     const [showForm, setShowForm] = useState(false);
 
-    console.log('App.jsx - showForm state:', showForm); // Debug log
 
     return (
         <Router>

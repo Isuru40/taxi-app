@@ -3,7 +3,6 @@ import dayjs from 'dayjs';
 import { Analytics } from "@vercel/analytics/react"
 
 const BookingForm = ({ setShowForm }) => {
-    console.log('BookingForm.jsx - BookingForm is rendering');
 
     const [formData, setFormData] = useState({
         name: '',
@@ -21,6 +20,8 @@ const BookingForm = ({ setShowForm }) => {
     });
     const [errors, setErrors] = useState({});
     const [countryCodeSearch, setCountryCodeSearch] = useState(''); // State for search input
+    const [isSubmitted, setIsSubmitted] = useState(false); // State to track submission
+    const [emailBody, setEmailBody] = useState(''); // State to store email body for display
 
     const countryCodes = [
         { code: '+94', label: 'Sri Lanka (+94)' },
@@ -48,7 +49,7 @@ const BookingForm = ({ setShowForm }) => {
         { code: '+62', label: 'Indonesia (+62)' },
         { code: '+20', label: 'Egypt (+20)' },
         { code: '+351', label: 'Portugal (+351)' },
-        { code: '+48', label: 'Poland (+48)' }, // Removed duplicates
+        { code: '+48', label: 'Poland (+48)' },
         { code: '+43', label: 'Austria (+43)' },
         { code: '+32', label: 'Belgium (+32)' },
         { code: '+47', label: 'Norway (+47)' },
@@ -167,6 +168,11 @@ const BookingForm = ({ setShowForm }) => {
         return newErrors;
     };
 
+    // Function to detect if the user is on a mobile device
+    const isMobileDevice = () => {
+        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    };
+
     const handleBookingSubmit = () => {
         const validationErrors = validateForm();
         if (Object.keys(validationErrors).length > 0) {
@@ -177,7 +183,45 @@ const BookingForm = ({ setShowForm }) => {
         const { name, email, countryCode, phone, service, destination, date, time, passengers, pickup, drop, notes } = formData;
         const subject = `New Booking Request - ${service}`;
         const body = `Name: ${name}\nEmail: ${email}\nPhone: ${countryCode}${phone}\nService: ${service}\nDestination: ${destination}\nDate: ${date}\nPickUp Time: ${time}\nPassengers: ${passengers}\nPickup: ${pickup}\nDrop-off: ${drop || 'Not specified'}\nNotes: ${notes || 'None'}`;
-        window.location.href = `mailto:laksiriroshan109@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        const mailtoLink = `mailto:laksiriroshan109@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+        if (isMobileDevice()) {
+            // On mobile, directly open the email client
+            window.location.href = mailtoLink;
+            setShowForm(false);
+            setFormData({
+                name: '',
+                email: '',
+                countryCode: '+94',
+                phone: '',
+                service: '',
+                destination: '',
+                date: '',
+                time: dayjs().format('HH:mm'),
+                passengers: '',
+                pickup: '',
+                drop: '',
+                notes: '',
+            });
+        } else {
+            // On desktop, show a confirmation message with options
+            setEmailBody(body);
+            setIsSubmitted(true);
+        }
+    };
+
+    // Function to copy email body to clipboard
+    const handleCopyToClipboard = () => {
+        navigator.clipboard.writeText(emailBody).then(() => {
+            alert('Booking details copied to clipboard! You can paste them into your email client.');
+        }).catch((err) => {
+            console.error('Failed to copy to clipboard:', err);
+            alert('Failed to copy to clipboard. Please copy the text manually.');
+        });
+    };
+
+    // Function to reset the form and close it
+    const handleClose = () => {
         setShowForm(false);
         setFormData({
             name: '',
@@ -193,271 +237,62 @@ const BookingForm = ({ setShowForm }) => {
             drop: '',
             notes: '',
         });
+        setIsSubmitted(false);
+        setEmailBody('');
     };
 
     return (
         <div className="fixed inset-0 bg-laksiri-purple bg-opacity-70 flex items-center justify-center z-100 overflow-y-auto">
             <Analytics />
-            <div className="bg-white p-6 sm rounded-xl shadow-2xl w-full max-w-md sm:max-w-xl mx-4 sm:mx-auto my-4 max-h-[80vh] overflow-y-auto custom-scrollbar">
-                {/* Header Section */}
-                <div className="flex justify-between items-center mb-6">
-                    <h3 className="text-xl sm:text-2xl font-bold text-laksiri-purple">Book Your Ride</h3>
-                    <button
-                        onClick={() => setShowForm(false)}
-                        className="text-gray-600 hover:text-gray-800 transition-colors"
-                    >
-                        <svg
-                            className="w-6 h-6"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg"
+            {isSubmitted ? (
+                // Confirmation message for desktop users
+                <div className="bg-white p-6 rounded-xl shadow-2xl w-full max-w-md sm:max-w-xl mx-4 sm:mx-auto my-4">
+                    <h3 className="text-xl sm:text-2xl font-bold text-laksiri-purple mb-4">Booking Request Submitted</h3>
+                    <p className="text-gray-800 mb-4">
+                        Thank you for your booking request! Please send the details below to{' '}
+                        <a
+                            href="mailto:laksiriroshan109@gmail.com"
+                            className="text-laksiri-purple hover:underline"
                         >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M6 18L18 6M6 6l12 12"
-                            />
-                        </svg>
-                    </button>
+                            laksiriroshan109@gmail.com
+                        </a>.
+                    </p>
+                    <div className="bg-gray-100 p-4 rounded-lg mb-4 text-gray-800 whitespace-pre-line">
+                        {emailBody}
+                    </div>
+                    <div className="flex justify-end space-x-4">
+                        <button
+                            onClick={handleCopyToClipboard}
+                            className="px-4 py-2 bg-gray-700 text-white font-semibold rounded-lg hover:bg-gray-800 transition-colors"
+                        >
+                            Copy to Clipboard
+                        </button>
+                        <a
+                            href={`mailto:laksiriroshan109@gmail.com?subject=${encodeURIComponent(`New Booking Request - ${formData.service}`)}&body=${encodeURIComponent(emailBody)}`}
+                            className="px-4 py-2 bg-laksiri-purple text-white font-semibold rounded-lg hover:bg-laksiri-purple-hover transition-colors"
+                        >
+                            Open Email Client
+                        </a>
+                        <button
+                            onClick={handleClose}
+                            className="px-4 py-2 bg-gray-500 text-white font-semibold rounded-lg hover:bg-gray-600 transition-colors"
+                        >
+                            Close
+                        </button>
+                    </div>
                 </div>
-
-                {/* Form Fields */}
-                <div className="space-y-6">
-                    {/* Name */}
-                    <div>
-                        <label className="block text-gray-800 font-semibold mb-2">Name</label>
-                        <input
-                            type="text"
-                            name="name"
-                            value={formData.name}
-                            onChange={handleInputChange}
-                            maxLength={100}
-                            className={`w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-laksiri-purple-hover focus:border-transparent transition-all text-gray-800 ${
-                                errors.name ? 'border-red-500' : 'border-gray-300'
-                            }`}
-                        />
-                        {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
-                    </div>
-
-                    {/* Email */}
-                    <div>
-                        <label className="block text-gray-800 font-semibold mb-2">Email</label>
-                        <input
-                            type="email"
-                            name="email"
-                            value={formData.email}
-                            onChange={handleInputChange}
-                            maxLength={100}
-                            className={`w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-laksiri-purple-hover focus:border-transparent transition-all text-gray-800 ${
-                                errors.email ? 'border-red-500' : 'border-gray-300'
-                            }`}
-                        />
-                        {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
-                    </div>
-
-                    {/* Phone Number with Country Code */}
-                    <div>
-                        <label className="block text-gray-800 font-semibold mb-2">Phone/WhatsApp Number</label>
-                        {/* Search Bar for Country Code */}
-                        <div className="mb-2">
-                            <input
-                                type="text"
-                                placeholder="Search country code..."
-                                value={countryCodeSearch}
-                                onChange={handleCountryCodeSearch}
-                                className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-laksiri-purple-hover focus:border-transparent transition-all text-gray-800 border-gray-300"
-                            />
-                        </div>
-                        <div className="flex space-x-2">
-                            <select
-                                name="countryCode"
-                                value={formData.countryCode}
-                                onChange={handleInputChange}
-                                className={`p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-laksiri-purple-hover focus:border-transparent transition-all text-gray-800 ${
-                                    errors.phone ? 'border-red-500' : 'border-gray-300'
-                                }`}
-                            >
-                                {filteredCountryCodes.length > 0 ? (
-                                    filteredCountryCodes.map((country) => (
-                                        <option key={country.code} value={country.code}>
-                                            {country.label}
-                                        </option>
-                                    ))
-                                ) : (
-                                    <option value="" disabled>
-                                        No matching countries
-                                    </option>
-                                )}
-                            </select>
-                            <input
-                                type="tel"
-                                name="phone"
-                                value={formData.phone}
-                                onChange={handleInputChange}
-                                maxLength={9}
-                                className={`w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-laksiri-purple-hover focus:border-transparent transition-all text-gray-800 ${
-                                    errors.phone ? 'border-red-500' : 'border-gray-300'
-                                }`}
-                                placeholder="123456789"
-                            />
-                        </div>
-                        {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
-                    </div>
-
-                    {/* Service */}
-                    <div>
-                        <label className="block text-gray-800 font-semibold mb-2">Service</label>
-                        <select
-                            name="service"
-                            value={formData.service}
-                            onChange={handleInputChange}
-                            className={`w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-laksiri-purple-hover focus:border-transparent transition-all bg-white text-gray-800 ${
-                                errors.service ? 'border-red-500' : 'border-gray-300'
-                            }`}
-                        >
-                            <option value="" disabled className="text-gray-500">
-                                Select a service
-                            </option>
-                            <option value="Airport Drop & Pickup" className="text-gray-800">
-                                Airport Drop & Pickup
-                            </option>
-                            <option value="Day Tours" className="text-gray-800">
-                                Day Tours
-                            </option>
-                            <option value="Multi-Day Tours" className="text-gray-800">
-                                Multi-Day Tours
-                            </option>
-                            <option value="Tuk-Tuk City Tours" className="text-gray-800">
-                                Tuk-Tuk City Tours
-                            </option>
-                        </select>
-                        {errors.service && <p className="text-red-500 text-sm mt-1">{errors.service}</p>}
-                    </div>
-
-                    {/* Destination */}
-                    <div>
-                        <label className="block text-gray-800 font-semibold mb-2">Destination</label>
-                        <input
-                            type="text"
-                            name="destination"
-                            value={formData.destination}
-                            onChange={handleInputChange}
-                            maxLength={150}
-                            className={`w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-laksiri-purple-hover focus:border-transparent transition-all text-gray-800 ${
-                                errors.destination ? 'border-red-500' : 'border-gray-300'
-                            }`}
-                        />
-                        {errors.destination && <p className="text-red-500 text-sm mt-1">{errors.destination}</p>}
-                    </div>
-
-                    {/* Date */}
-                    <div>
-                        <label className="block text-gray-800 font-semibold mb-2">Date</label>
-                        <input
-                            type="date"
-                            name="date"
-                            value={formData.date}
-                            onChange={handleInputChange}
-                            className={`w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-laksiri-purple-hover focus:border-transparent transition-all text-gray-800 ${
-                                errors.date ? 'border-red-500' : 'border-gray-300'
-                            }`}
-                            min={dayjs().format('YYYY-MM-DD')}
-                        />
-                        {errors.date && <p className="text-red-500 text-sm mt-1">{errors.date}</p>}
-                    </div>
-
-                    {/* PickUp Time */}
-                    <div>
-                        <label className="block text-gray-800 font-semibold mb-2">PickUp Time</label>
-                        <input
-                            type="time"
-                            name="time"
-                            value={formData.time}
-                            onChange={handleInputChange}
-                            step="60"
-                            min={formData.date === dayjs().format('YYYY-MM-DD') ? dayjs().format('HH:mm') : undefined}
-                            className={`w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-laksiri-purple-hover focus:border-transparent transition-all text-gray-800 ${
-                                errors.time ? 'border-red-500' : 'border-gray-300'
-                            }`}
-                        />
-                        {errors.time && <p className="text-red-500 text-sm mt-1">{errors.time}</p>}
-                    </div>
-
-                    {/* Number of Passengers */}
-                    <div>
-                        <label className="block text-gray-800 font-semibold mb-2">Number of Passengers</label>
-                        <input
-                            type="number"
-                            name="passengers"
-                            value={formData.passengers}
-                            onChange={handleInputChange}
-                            min="1"
-                            max="200"
-                            className={`w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-laksiri-purple-hover focus:border-transparent transition-all text-gray-800 ${
-                                errors.passengers ? 'border-red-500' : 'border-gray-300'
-                            }`}
-                        />
-                        {errors.passengers && <p className="text-red-500 text-sm mt-1">{errors.passengers}</p>}
-                    </div>
-
-                    {/* Place of Pickup */}
-                    <div>
-                        <label className="block text-gray-800 font-semibold mb-2">Place of Pickup</label>
-                        <input
-                            type="text"
-                            name="pickup"
-                            value={formData.pickup}
-                            onChange={handleInputChange}
-                            maxLength={100}
-                            className={`w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-laksiri-purple-hover focus:border-transparent transition-all text-gray-800 ${
-                                errors.pickup ? 'border-red-500' : 'border-gray-300'
-                            }`}
-                        />
-                        {errors.pickup && <p className="text-red-500 text-sm mt-1">{errors.pickup}</p>}
-                    </div>
-
-                    {/* Place of Drop */}
-                    <div>
-                        <label className="block text-gray-800 font-semibold mb-2">Place of Drop-off (Optional)</label>
-                        <input
-                            type="text"
-                            name="drop"
-                            value={formData.drop}
-                            onChange={handleInputChange}
-                            maxLength={100}
-                            className={`w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-laksiri-purple-hover focus:border-transparent transition-all text-gray-800 ${
-                                errors.drop ? 'border-red-500' : 'border-gray-300'
-                            }`}
-                        />
-                        {errors.drop && <p className="text-red-500 text-sm mt-1">{errors.drop}</p>}
-                    </div>
-
-                    {/* Notes */}
-                    <div>
-                        <label className="block text-gray-800 font-semibold mb-2">Notes (Optional)</label>
-                        <textarea
-                            name="notes"
-                            value={formData.notes}
-                            onChange={handleInputChange}
-                            maxLength={150}
-                            rows="3"
-                            className={`w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-laksiri-purple-hover focus:border-transparent transition-all text-gray-800 ${
-                                errors.notes ? 'border-red-500' : 'border-gray-300'
-                            }`}
-                        />
-                        {errors.notes && <p className="text-red-500 text-sm mt-1">{errors.notes}</p>}
-                    </div>
-
-                    {/* Buttons */}
-                    <div className="flex justify-end space-x-4 mt-8 sticky bottom-0 bg-white pt-4 z-10">
+            ) : (
+                // Form UI (unchanged except for the submit handler)
+                <div className="bg-white p-6 sm rounded-xl shadow-2xl w-full max-w-md sm:max-w-xl mx-4 sm:mx-auto my-4 max-h-[80vh] overflow-y-auto custom-scrollbar">
+                    {/* Header Section */}
+                    <div className="flex justify-between items-center mb-6">
+                        <h3 className="text-xl sm:text-2xl font-bold text-laksiri-purple">Book Your Ride</h3>
                         <button
                             onClick={() => setShowForm(false)}
-                            className="px-4 sm:px-6 py-2 bg-gray-700 text-white font-semibold rounded-lg hover:bg-gray-800 transition-colors flex items-center gap-2"
+                            className="text-gray-600 hover:text-gray-800 transition-colors"
                         >
                             <svg
-                                className="w-5 h-5"
+                                className="w-6 h-6"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
@@ -470,31 +305,282 @@ const BookingForm = ({ setShowForm }) => {
                                     d="M6 18L18 6M6 6l12 12"
                                 />
                             </svg>
-                            Cancel
-                        </button>
-                        <button
-                            onClick={handleBookingSubmit}
-                            className="px-4 sm:px-6 py-2 bg-laksiri-purple text-white font-semibold rounded-lg hover:bg-laksiri-purple-hover transition-colors flex items-center gap-2"
-                        >
-                            <svg
-                                className="w-5 h-5"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                                xmlns="http://www.w3.org/2000/svg"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth="2"
-                                    d="M5 13l4 4L19 7"
-                                />
-                            </svg>
-                            Submit
                         </button>
                     </div>
+
+                    {/* Form Fields */}
+                    <div className="space-y-6">
+                        {/* Name */}
+                        <div>
+                            <label className="block text-gray-800 font-semibold mb-2">Name</label>
+                            <input
+                                type="text"
+                                name="name"
+                                value={formData.name}
+                                onChange={handleInputChange}
+                                maxLength={100}
+                                className={`w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-laksiri-purple-hover focus:border-transparent transition-all text-gray-800 ${
+                                    errors.name ? 'border-red-500' : 'border-gray-300'
+                                }`}
+                            />
+                            {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
+                        </div>
+
+                        {/* Email */}
+                        <div>
+                            <label className="block text-gray-800 font-semibold mb-2">Email</label>
+                            <input
+                                type="email"
+                                name="email"
+                                value={formData.email}
+                                onChange={handleInputChange}
+                                maxLength={100}
+                                className={`w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-laksiri-purple-hover focus:border-transparent transition-all text-gray-800 ${
+                                    errors.email ? 'border-red-500' : 'border-gray-300'
+                                }`}
+                            />
+                            {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
+                        </div>
+
+                        {/* Phone Number with Country Code */}
+                        <div>
+                            <label className="block text-gray-800 font-semibold mb-2">Phone/WhatsApp Number</label>
+                            {/* Search Bar for Country Code */}
+                            <div className="mb-2">
+                                <input
+                                    type="text"
+                                    placeholder="Search country code..."
+                                    value={countryCodeSearch}
+                                    onChange={handleCountryCodeSearch}
+                                    className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-laksiri-purple-hover focus:border-transparent transition-all text-gray-800 border-gray-300"
+                                />
+                            </div>
+                            <div className="flex space-x-2">
+                                <select
+                                    name="countryCode"
+                                    value={formData.countryCode}
+                                    onChange={handleInputChange}
+                                    className={`p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-laksiri-purple-hover focus:border-transparent transition-all text-gray-800 ${
+                                        errors.phone ? 'border-red-500' : 'border-gray-300'
+                                    }`}
+                                >
+                                    {filteredCountryCodes.length > 0 ? (
+                                        filteredCountryCodes.map((country) => (
+                                            <option key={country.code} value={country.code}>
+                                                {country.label}
+                                            </option>
+                                        ))
+                                    ) : (
+                                        <option value="" disabled>
+                                            No matching countries
+                                        </option>
+                                    )}
+                                </select>
+                                <input
+                                    type="tel"
+                                    name="phone"
+                                    value={formData.phone}
+                                    onChange={handleInputChange}
+                                    maxLength={9}
+                                    className={`w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-laksiri-purple-hover focus:border-transparent transition-all text-gray-800 ${
+                                        errors.phone ? 'border-red-500' : 'border-gray-300'
+                                    }`}
+                                    placeholder="123456789"
+                                />
+                            </div>
+                            {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
+                        </div>
+
+                        {/* Service */}
+                        <div>
+                            <label className="block text-gray-800 font-semibold mb-2">Service</label>
+                            <select
+                                name="service"
+                                value={formData.service}
+                                onChange={handleInputChange}
+                                className={`w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-laksiri-purple-hover focus:border-transparent transition-all bg-white text-gray-800 ${
+                                    errors.service ? 'border-red-500' : 'border-gray-300'
+                                }`}
+                            >
+                                <option value="" disabled className="text-gray-500">
+                                    Select a service
+                                </option>
+                                <option value="Airport Drop & Pickup" className="text-gray-800">
+                                    Airport Drop & Pickup
+                                </option>
+                                <option value="Day Tours" className="text-gray-800">
+                                    Day Tours
+                                </option>
+                                <option value="Multi-Day Tours" className="text-gray-800">
+                                    Multi-Day Tours
+                                </option>
+                                <option value="Tuk-Tuk City Tours" className="text-gray-800">
+                                    Tuk-Tuk City Tours
+                                </option>
+                            </select>
+                            {errors.service && <p className="text-red-500 text-sm mt-1">{errors.service}</p>}
+                        </div>
+
+                        {/* Destination */}
+                        <div>
+                            <label className="block text-gray-800 font-semibold mb-2">Destination</label>
+                            <input
+                                type="text"
+                                name="destination"
+                                value={formData.destination}
+                                onChange={handleInputChange}
+                                maxLength={150}
+                                className={`w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-laksiri-purple-hover focus:border-transparent transition-all text-gray-800 ${
+                                    errors.destination ? 'border-red-500' : 'border-gray-300'
+                                }`}
+                            />
+                            {errors.destination && <p className="text-red-500 text-sm mt-1">{errors.destination}</p>}
+                        </div>
+
+                        {/* Date */}
+                        <div>
+                            <label className="block text-gray-800 font-semibold mb-2">Date</label>
+                            <input
+                                type="date"
+                                name="date"
+                                value={formData.date}
+                                onChange={handleInputChange}
+                                className={`w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-laksiri-purple-hover focus:border-transparent transition-all text-gray-800 ${
+                                    errors.date ? 'border-red-500' : 'border-gray-300'
+                                }`}
+                                min={dayjs().format('YYYY-MM-DD')}
+                            />
+                            {errors.date && <p className="text-red-500 text-sm mt-1">{errors.date}</p>}
+                        </div>
+
+                        {/* PickUp Time */}
+                        <div>
+                            <label className="block text-gray-800 font-semibold mb-2">PickUp Time</label>
+                            <input
+                                type="time"
+                                name="time"
+                                value={formData.time}
+                                onChange={handleInputChange}
+                                step="60"
+                                min={formData.date === dayjs().format('YYYY-MM-DD') ? dayjs().format('HH:mm') : undefined}
+                                className={`w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-laksiri-purple-hover focus:border-transparent transition-all text-gray-800 ${
+                                    errors.time ? 'border-red-500' : 'border-gray-300'
+                                }`}
+                            />
+                            {errors.time && <p className="text-red-500 text-sm mt-1">{errors.time}</p>}
+                        </div>
+
+                        {/* Number of Passengers */}
+                        <div>
+                            <label className="block text-gray-800 font-semibold mb-2">Number of Passengers</label>
+                            <input
+                                type="number"
+                                name="passengers"
+                                value={formData.passengers}
+                                onChange={handleInputChange}
+                                min="1"
+                                max="200"
+                                className={`w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-laksiri-purple-hover focus:border-transparent transition-all text-gray-800 ${
+                                    errors.passengers ? 'border-red-500' : 'border-gray-300'
+                                }`}
+                            />
+                            {errors.passengers && <p className="text-red-500 text-sm mt-1">{errors.passengers}</p>}
+                        </div>
+
+                        {/* Place of Pickup */}
+                        <div>
+                            <label className="block text-gray-800 font-semibold mb-2">Place of Pickup</label>
+                            <input
+                                type="text"
+                                name="pickup"
+                                value={formData.pickup}
+                                onChange={handleInputChange}
+                                maxLength={100}
+                                className={`w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-laksiri-purple-hover focus:border-transparent transition-all text-gray-800 ${
+                                    errors.pickup ? 'border-red-500' : 'border-gray-300'
+                                }`}
+                            />
+                            {errors.pickup && <p className="text-red-500 text-sm mt-1">{errors.pickup}</p>}
+                        </div>
+
+                        {/* Place of Drop */}
+                        <div>
+                            <label className="block text-gray-800 font-semibold mb-2">Place of Drop-off (Optional)</label>
+                            <input
+                                type="text"
+                                name="drop"
+                                value={formData.drop}
+                                onChange={handleInputChange}
+                                maxLength={100}
+                                className={`w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-laksiri-purple-hover focus:border-transparent transition-all text-gray-800 ${
+                                    errors.drop ? 'border-red-500' : 'border-gray-300'
+                                }`}
+                            />
+                            {errors.drop && <p className="text-red-500 text-sm mt-1">{errors.drop}</p>}
+                        </div>
+
+                        {/* Notes */}
+                        <div>
+                            <label className="block text-gray-800 font-semibold mb-2">Notes (Optional)</label>
+                            <textarea
+                                name="notes"
+                                value={formData.notes}
+                                onChange={handleInputChange}
+                                maxLength={150}
+                                rows="3"
+                                className={`w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-laksiri-purple-hover focus:border-transparent transition-all text-gray-800 ${
+                                    errors.notes ? 'border-red-500' : 'border-gray-300'
+                                }`}
+                            />
+                            {errors.notes && <p className="text-red-500 text-sm mt-1">{errors.notes}</p>}
+                        </div>
+
+                        {/* Buttons */}
+                        <div className="flex justify-end space-x-4 mt-8 sticky bottom-0 bg-white pt-4 z-10">
+                            <button
+                                onClick={() => setShowForm(false)}
+                                className="px-4 sm:px-6 py-2 bg-gray-700 text-white font-semibold rounded-lg hover:bg-gray-800 transition-colors flex items-center gap-2"
+                            >
+                                <svg
+                                    className="w-5 h-5"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth="2"
+                                        d="M6 18L18 6M6 6l12 12"
+                                    />
+                                </svg>
+                                Cancel
+                            </button>
+                            <button
+                                onClick={handleBookingSubmit}
+                                className="px-4 sm:px-6 py-2 bg-laksiri-purple text-white font-semibold rounded-lg hover:bg-laksiri-purple-hover transition-colors flex items-center gap-2"
+                            >
+                                <svg
+                                    className="w-5 h-5"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth="2"
+                                        d="M5 13l4 4L19 7"
+                                    />
+                                </svg>
+                                Submit
+                            </button>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            )}
         </div>
     );
 };
