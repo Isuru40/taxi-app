@@ -11,7 +11,7 @@ const Header = ({ setShowForm }) => {
     };
 
     return (
-        <header className="fixed top-0 left-0 w-full bg-laksiri-purple bg-opacity-90 shadow-lg z-60">
+        <header className="fixed top-0 left-0 w-full bg-laksiri-purple bg-opacity-0 shadow-lg">
             <div className="container mx-auto px-4 py-3 flex items-center justify-between">
                 {/* Logo */}
                 <h2 className="text-white text-xl sm:text-2xl font-bold truncate">
