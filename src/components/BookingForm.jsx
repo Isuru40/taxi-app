@@ -3,6 +3,7 @@ import dayjs from 'dayjs';
 import { Analytics } from "@vercel/analytics/react"
 
 const BookingForm = ({ setShowForm }) => {
+    console.log('BookingForm.jsx - BookingForm is rendering');
 
     const [formData, setFormData] = useState({
         name: '',
@@ -78,6 +79,7 @@ const BookingForm = ({ setShowForm }) => {
         { code: '+254', label: 'Kenya (+254)' },
         { code: '+998', label: 'Uzbekistan (+998)' },
         { code: '+380', label: 'Ukraine (+380)' },
+        { code: '+55', label: 'Brazil (+55)' }
     ];
 
     // Filter country codes based on search input
@@ -282,7 +284,7 @@ const BookingForm = ({ setShowForm }) => {
                     </div>
                 </div>
             ) : (
-                // Form UI (unchanged except for the submit handler)
+                // Form UI
                 <div className="bg-white p-6 sm rounded-xl shadow-2xl w-full max-w-md sm:max-w-xl mx-4 sm:mx-auto my-4 max-h-[80vh] overflow-y-auto custom-scrollbar">
                     {/* Header Section */}
                     <div className="flex justify-between items-center mb-6">
@@ -355,12 +357,12 @@ const BookingForm = ({ setShowForm }) => {
                                     className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-laksiri-purple-hover focus:border-transparent transition-all text-gray-800 border-gray-300"
                                 />
                             </div>
-                            <div className="flex space-x-2">
+                            <div className="flex space-x-2 items-center">
                                 <select
                                     name="countryCode"
                                     value={formData.countryCode}
                                     onChange={handleInputChange}
-                                    className={`p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-laksiri-purple-hover focus:border-transparent transition-all text-gray-800 ${
+                                    className={`w-24 sm:w-28 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-laksiri-purple-hover focus:border-transparent transition-all text-gray-800 ${
                                         errors.phone ? 'border-red-500' : 'border-gray-300'
                                     }`}
                                 >
@@ -382,7 +384,7 @@ const BookingForm = ({ setShowForm }) => {
                                     value={formData.phone}
                                     onChange={handleInputChange}
                                     maxLength={9}
-                                    className={`w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-laksiri-purple-hover focus:border-transparent transition-all text-gray-800 ${
+                                    className={`flex-1 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-laksiri-purple-hover focus:border-transparent transition-all text-gray-800 ${
                                         errors.phone ? 'border-red-500' : 'border-gray-300'
                                     }`}
                                     placeholder="123456789"
