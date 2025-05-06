@@ -17,10 +17,14 @@ const LocationReviews = () => {
             </p>
             <h3 className="text-xl font-semibold text-center mb-4 text-laksiri-purple">Google Reviews</h3>
             <div className="w-full max-w-full mx-auto px-2 sm:max-w-4xl">
-                <div className="sk-ww-google-reviews w-full" data-embed-id="25550937"></div>
+                <div className="relative w-full max-w-[800px] mx-auto">
+                    <div className="review-container w-[800px] h-[400px] overflow-x-auto overflow-y-auto mx-auto">
+                        <div className="sk-ww-google-reviews w-full" data-embed-id="25550937"></div>
+                    </div>
+                </div>
             </div>
 
-            {/* Custom CSS to fix mobile view */}
+            {/* Custom CSS to fix mobile view and add scrollbars */}
             <style jsx>{`
                 /* Ensure the parent container takes full width on mobile */
                 .max-w-full {
@@ -28,7 +32,17 @@ const LocationReviews = () => {
                     width: 100% !important;
                 }
 
-                /* Force the SociableKIT widget to fit within the viewport */
+                /* Fixed-size container with scrollbars */
+                .review-container {
+                    width: 800px !important;
+                    height: 400px !important;
+                    overflow-x: auto !important;
+                    overflow-y: auto !important;
+                    box-sizing: border-box !important;
+                    position: relative !important;
+                }
+
+                /* Ensure SociableKIT widget fits within the container */
                 .sk-ww-google-reviews {
                     width: 100% !important;
                     max-width: 100% !important;
@@ -53,7 +67,7 @@ const LocationReviews = () => {
                 .sk-ww-google-reviews-feed .sk-ww-google-reviews-review {
                     flex: 0 0 85% !important;
                     max-width: 85% !important;
-                    min-width: 0 !important; /* Prevent fixed min-width issues */
+                    min-width: 0 !important;
                     margin: 0 2.5% !important;
                     scroll-snap-align: center !important;
                     box-sizing: border-box !important;
@@ -87,18 +101,33 @@ const LocationReviews = () => {
                     font-size: 0.9rem !important;
                 }
 
+                /* Ensure scrollbars are visible and styled */
+                .review-container::-webkit-scrollbar {
+                    width: 10px !important;
+                    height: 10px !important;
+                }
+                .review-container::-webkit-scrollbar-thumb {
+                    background: #888 !important;
+                    border-radius: 5px !important;
+                }
+                .review-container::-webkit-scrollbar-track {
+                    background: #f1f1f1 !important;
+                }
+
                 /* Specific adjustments for mobile screens */
                 @media (max-width: 640px) {
+                    .review-container {
+                        width: 100% !important;
+                        height: 300px !important; /* Reduced height for mobile */
+                    }
                     .sk-ww-google-reviews-feed .sk-ww-google-reviews-review {
                         flex: 0 0 90% !important;
                         max-width: 90% !important;
                         margin: 0 5% !important;
                     }
-
                     .sk-ww-google-reviews-feed .sk-ww-google-reviews-prev {
                         left: 0 !important;
                     }
-
                     .sk-ww-google-reviews-feed .sk-ww-google-reviews-next {
                         right: 0 !important;
                     }
