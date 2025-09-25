@@ -185,7 +185,7 @@ const BookingForm = ({ setShowForm }) => {
         const { name, email, countryCode, phone, service, destination, date, time, passengers, pickup, drop, notes } = formData;
         const subject = `New Booking Request - ${service}`;
         const body = `Name: ${name}\nEmail: ${email}\nPhone: ${countryCode}${phone}\nService: ${service}\nDestination: ${destination}\nDate: ${date}\nPickUp Time: ${time}\nPassengers: ${passengers}\nPickup: ${pickup}\nDrop-off: ${drop || 'Not specified'}\nNotes: ${notes || 'None'}`;
-        const mailtoLink = `mailto:laksiriroshan109@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        const mailtoLink = `mailto:laksiritourskandy@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
         if (isMobileDevice()) {
             // On mobile, directly open the email client
@@ -253,10 +253,10 @@ const BookingForm = ({ setShowForm }) => {
                     <p className="text-gray-800 mb-4">
                         Thank you for your booking request! Please send the details below to{' '}
                         <a
-                            href="mailto:laksiriroshan109@gmail.com"
+                            href="mailto:laksiritourskandy@gmail.com"
                             className="text-laksiri-purple hover:underline"
                         >
-                            laksiriroshan109@gmail.com
+                            laksiritourskandy@gmail.com
                         </a>.
                     </p>
                     <div className="bg-gray-100 p-4 rounded-lg mb-4 text-gray-800 whitespace-pre-line">
@@ -270,7 +270,7 @@ const BookingForm = ({ setShowForm }) => {
                             Copy to Clipboard
                         </button>
                         <a
-                            href={`mailto:laksiriroshan109@gmail.com?subject=${encodeURIComponent(`New Booking Request - ${formData.service}`)}&body=${encodeURIComponent(emailBody)}`}
+                            href={`mailto:laksiritourskandy@gmail.com?subject=${encodeURIComponent(`New Booking Request - ${formData.service}`)}&body=${encodeURIComponent(emailBody)}`}
                             className="px-4 py-2 bg-laksiri-purple text-white font-semibold rounded-lg hover:bg-laksiri-purple-hover transition-colors"
                         >
                             Open Email Client

@@ -13,7 +13,7 @@ const Footer = () => {
                 </a>
             </div>
             <p className="text-gray-800 mb-2">
-                Email: <a href="mailto:laksiriroshan109@gmail.com" className="text-laksiri-purple hover:text-laksiri-purple-hover">laksiriroshan109@gmail.com</a>
+                Email: <a href="mailto:laksiritourskandy@gmail.com" className="text-laksiri-purple hover:text-laksiri-purple-hover">laksiritourskandy@gmail.com</a>
             </p>
             <p className="text-gray-800 mb-2">
                 Phone: <a href="https://wa.me/+94757268109" className="text-laksiri-purple hover:text-laksiri-purple-hover">+94 75 726 8109</a>
