@@ -1,3 +1,5 @@
+import tripadvisorIcon from "../assets/tripadvisor.svg";
+
 const Footer = () => {
     return (
         <footer className="py-8 px-4 bg-gray-100 text-center">
@@ -45,7 +47,7 @@ const Footer = () => {
                     rel="noopener noreferrer"
                 >
                     <img
-                        src="https://cdn-icons-png.flaticon.com/512/2111/2111320.png"
+                        src={tripadvisorIcon}
                         alt="TripAdvisor"
                         className="w-6 h-6 hover:opacity-75 transition-opacity"
                     />
