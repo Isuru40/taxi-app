@@ -42,6 +42,18 @@ const Footer = () => {
 
                 {/* ✅ TripAdvisor */}
                 <a
+                    href="https://www.youtube.com/@laksiritourskandy"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    <img
+                        src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png"
+                        alt="YouTube"
+                        className="w-6 h-6 hover:opacity-75 transition-opacity"
+                    />
+                </a>
+
+                <a
                     href="https://www.tripadvisor.co.uk/Attraction_Review-g304138-d33100775-Reviews-Laksiri_Tours_Kandy-Kandy_Kandy_District_Central_Province.html"
                     target="_blank"
                     rel="noopener noreferrer"

@@ -19,6 +19,34 @@ const About = () => {
                     <p className="text-gray-800">Book your ride easily via WhatsApp or email.</p>
                 </div>
             </div>
+
+            <div className="mt-16 max-w-5xl mx-auto">
+                <div className="flex flex-col items-center gap-4 mb-6">
+                    <h3 className="text-2xl font-bold text-laksiri-purple">Ionic Video</h3>
+                    <p className="text-gray-800 max-w-2xl">
+                        Watch our featured video and visit the YouTube channel for more travel content from Laksiri Tours Kandy.
+                    </p>
+                    <a
+                        href="https://www.youtube.com/@laksiritourskandy"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center rounded-full bg-laksiri-purple px-6 py-3 font-semibold text-white transition hover:bg-laksiri-purple-hover"
+                    >
+                        Visit YouTube Channel
+                    </a>
+                </div>
+
+                <div className="overflow-hidden rounded-2xl shadow-xl bg-black aspect-video">
+                    <iframe
+                        className="h-full w-full"
+                        src="https://www.youtube.com/embed/iuZn3tGaF2Q"
+                        title="Laksiri Tours Kandy Ionic Video"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        referrerPolicy="strict-origin-when-cross-origin"
+                        allowFullScreen
+                    />
+                </div>
+            </div>
         </section>
     );
 };
